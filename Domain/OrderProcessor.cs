@@ -12,12 +12,12 @@
                     {
                         if(order.Items.Count > 15)
                         {
-                            throw new Exception("The order " + order.Id + " has too many items.");
+                            throw new OrderHasTooManyLineItemsException(order.Id);
                         }
 
                         if (order.OrderStatus != "ReadyToProcess")
                         {
-                            throw new Exception("The order " + order.Id + " isn't ready to process");
+                            throw new OrderNotReadyForProcessingException(order.Id);
                         }
 
                         order.IsProcessed = true;
