@@ -2,19 +2,21 @@
 {
     public class OrderProcessorClean
     {
+        private const int ProcessableNumberOfLineItems = 15;
+
         public void Process(Order? order)
         {
             if (!IsOrderProcessable(order))            
                 return;
             
-            if (order!.Items.Count > 15)
+            if (order!.Items.Count > ProcessableNumberOfLineItems)
             {
-                throw new Exception("The order " + order.Id + " has too many items.");
+                throw new OrderHasTooManyLineItemsException(order.Id);
             }
 
-            if (order.OrderStatus != "ReadyToProcess")
+            if (order.OrderStatus != OrderStatus.ReadyToProcess)
             {
-                throw new Exception("The order " + order.Id + " isn't ready to process");
+                throw new OrderNotReadyForProcessingException(order.Id);
             }
 
             order.IsProcessed = true;
