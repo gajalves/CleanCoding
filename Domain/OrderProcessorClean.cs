@@ -4,22 +4,24 @@
     {
         private const int ProcessableNumberOfLineItems = 15;
 
-        public void Process(Order? order)
+        public ProcessOrderResult Process(Order? order)
         {
             if (!IsOrderProcessable(order))            
-                return;
+                return ProcessOrderResult.NotProcessable();
             
             if (order!.Items.Count > ProcessableNumberOfLineItems)
-            {
-                throw new OrderHasTooManyLineItemsException(order.Id);
+            {                
+                return ProcessOrderResult.HasToManyLineItems(order.Id);
             }
 
             if (order.OrderStatus != OrderStatus.ReadyToProcess)
             {
-                throw new OrderNotReadyForProcessingException(order.Id);
+                return ProcessOrderResult.NotReadyForProcessing(order.Id);
             }
 
             order.IsProcessed = true;
+
+            return ProcessOrderResult.Successful(order.Id);
         }
 
         private static bool IsOrderProcessable(Order? order)
