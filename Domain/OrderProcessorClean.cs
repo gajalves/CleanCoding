@@ -22,8 +22,8 @@
 
         private static bool IsOrderProcessable(Order? order)
         {
-            return order is null ||
-                   order.IsVerified ||
+            return order is not null &&
+                   order.IsVerified &&
                    order.Items.Any();
         }
     }
